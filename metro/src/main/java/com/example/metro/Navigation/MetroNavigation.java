@@ -1,6 +1,6 @@
 package com.example.metro.Navigation;
 
-import com.example.metro.Navigation.MetroMepData.MetroMapData;
+import com.example.metro.Navigation.MetroMapData.MetroMapData;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
