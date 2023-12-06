@@ -1,6 +1,6 @@
-package com.example.metro.Navigation.MetroMapData;
+package com.example.metro.navigation.data;
 
-import com.example.metro.Navigation.Entity.SubwayStationNode;
+import com.example.metro.navigation.entity.SubwayStationNode;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.example.metro.Navigation.Entity;
+package com.example.metro.navigation.entity;
 
 import java.util.ArrayList;
 import java.util.List;

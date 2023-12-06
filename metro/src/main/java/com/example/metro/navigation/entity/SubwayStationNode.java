@@ -1,4 +1,4 @@
-package com.example.metro.Navigation.Entity;
+package com.example.metro.navigation.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,5 +11,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SubwayStationNode {
 
+    private int SubwayStationNodeId;
     private List<SubwayEdge> subwayEdgeList = new ArrayList<>();
 }
