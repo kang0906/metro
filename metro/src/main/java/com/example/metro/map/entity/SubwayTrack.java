@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class SubwayTrack {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long SubwayTrackId;
+    private int SubwayTrackId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "departureStationId")

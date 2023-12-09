@@ -13,7 +13,7 @@ public class SubwayStation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long subwayStationId;
+    private int subwayStationId;
     private String StationName;
     private String lineName;
     private boolean isTransfer;
