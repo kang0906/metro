@@ -25,7 +25,7 @@ public class MetroNavigation {
         HashMap<Integer, MetroCourse> nextNodeMap = new HashMap<>();
 
         SubwayStationNode startNode = metroMapData.findNodeByNodeId(start);
-        nextNodeMap.put(startNode.getSubwayStationNodeId(), new MetroCourse(startNode));
+        nextNodeMap.put(startNode.getSubwayStationNodeId(), new MetroCourse(startNode, 0));
 
         MetroCourse toDestination = null;
         while (toDestination == null){

@@ -13,8 +13,13 @@ public class MetroCourse {
     private List<Integer> course = new ArrayList<>();
     private int totalCost = 0;
 
-    public MetroCourse(SubwayStationNode node) {
-        course.add(node.getSubwayStationNodeId());
+    /**
+     * @param node 출발역
+     * @param startCost 출발역 대기시간 (열차도착까지)
+     */
+    public MetroCourse(SubwayStationNode node, int startCost) {
+        this.course.add(node.getSubwayStationNodeId());
+        this.totalCost += startCost;
     }
 
     public MetroCourse(MetroCourse metroCourse, SubwayEdge subwayEdge) {
