@@ -49,7 +49,13 @@ public class MetroDataAccessService {
                     log.info("지하철 노선 중복 저장 시도 : [DB : {}, input data : {} -> {}]", findSubwayTrack, previous.getStatn_nm(), current.getStatn_nm());
                 }
                 // 간선 등록 현재역 -> 이전역
-
+                SubwayTrack findSubwayTrackReverse = subwayTrackRepository.findByDepartureStationAndArrivalStation(saveCurrent, savePrevious);
+                if (findSubwayTrackReverse == null) {
+                    subwayTrackRepository.save(
+                            new SubwayTrack(saveCurrent, savePrevious, saveCurrent.getLineName(), false, convertTimeFromString(current.getMnt())));
+                } else {
+                    log.info("지하철 노선 중복 저장 시도 : [DB : {}, input data : {} -> {}]", findSubwayTrackReverse, previous.getStatn_nm(), current.getStatn_nm());
+                }
             }
             previous = current;
         }

@@ -1,7 +1,5 @@
-package com.example.metro.navigation;
+package com.example.metro.navigation.entity;
 
-import com.example.metro.navigation.entity.SubwayEdge;
-import com.example.metro.navigation.entity.SubwayStationNode;
 import lombok.Getter;
 
 import java.util.ArrayList;
