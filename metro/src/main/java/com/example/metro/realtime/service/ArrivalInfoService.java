@@ -1,8 +1,10 @@
 package com.example.metro.realtime.service;
 
 import com.example.metro.realtime.entity.ArrivalInfoLog;
+import com.example.metro.realtime.entity.SeoulApiRequestLog;
 import com.example.metro.realtime.entity.SeoulApiStationInfo;
 import com.example.metro.realtime.repository.ArrivalInfoLogRepository;
+import com.example.metro.realtime.repository.SeoulApiRequestLogRepository;
 import com.example.metro.realtime.repository.SeoulApiStationInfoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,6 +28,7 @@ public class ArrivalInfoService {
 
     private final SeoulApiStationInfoRepository seoulApiStationInfoRepository;
     private final ArrivalInfoLogRepository arrivalInfoLogRepository;
+    private final SeoulApiRequestLogRepository seoulApiRequestLogRepository;
 
     @Transactional
     public void checkArrivalInfoFromSeoulApiBylineName(String lineName) {
@@ -35,22 +39,26 @@ public class ArrivalInfoService {
         // 조회한 역 정보를 기반으로 실시간 지하철 API 호출
         for (SeoulApiStationInfo seoulApiStationInfo : allBySubwayName) {
             getArrivalInfoFromSeoulApi(seoulApiStationInfo.getStationName());
-            
-            // todo : 외부 API 호출 횟수 카운트
-            log.info("서울시 API 호출");
         }
     }
 
 
+    @Transactional
     public void getArrivalInfoFromSeoulApi(String stationName) {
+        LocalDateTime now = LocalDateTime.now();
+        if(checkApiLimitOver(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0))) {
+            log.warn("!!! Api Limit Over !!!");
+            throw new RuntimeException("!!! Api Limit Over !!!");
+        }
+
         // 실시간 API 호출
         log.debug("getArrivalInfoFromSeoulApi called with stationName : {}", stationName);
+        seoulApiRequestLogRepository.save(new SeoulApiRequestLog("realtimeStationArrival", stationName));
         ResponseEntity<String> response = new RestTemplate().exchange(
                 "http://swopenAPI.seoul.go.kr/api/subway/5673747a416a696e38386254635544/json/realtimeStationArrival/0/100/" + stationName,
                 HttpMethod.GET,
                 null,
                 String.class);
-        // todo : 실시간 API 사용량 소진에 따른 에러응답에 대한 예외 처리
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -64,7 +72,7 @@ public class ArrivalInfoService {
         JsonNode realtimeArrivalList = jsonNode.get("realtimeArrivalList");
 
         for (int i = 0; i < 100; i++) {
-            log.info("call saveArrivalInfoFromJsonNode [{}] time", i);
+            log.trace("call saveArrivalInfoFromJsonNode [{}] time", i);
             if(!saveArrivalInfoFromJsonNode(realtimeArrivalList.get(i))){
                 break;
             }
@@ -87,6 +95,17 @@ public class ArrivalInfoService {
         arrivalInfoLogRepository.save(arrivalInfoLog);
 
         return true;
+    }
+
+    public boolean checkApiLimitOver(LocalDateTime start) {
+        List<SeoulApiRequestLog> requestLogList = seoulApiRequestLogRepository.findAllByCreatedDateTimeAfter(start);
+
+        log.info("Total Api(Seoul Real Time Metro) Call Today : {}", requestLogList.size());
+        if (requestLogList.size() > 950) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
