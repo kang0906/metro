@@ -506,6 +506,8 @@ INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name
 INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063075333,'월롱','경의중앙선');
 INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063075334,'파주','경의중앙선');
 INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063075335,'문산','경의중앙선');
+INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063075336,'운천','경의중앙선');
+INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063075337,'임진강','경의중앙선');
 INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063075826,'효창공원앞','경의중앙선');
 INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063080312,'신촌(경의중앙선)','경의중앙선');
 INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name) VALUES (1063,1063080313,'서울','경의중앙선');
