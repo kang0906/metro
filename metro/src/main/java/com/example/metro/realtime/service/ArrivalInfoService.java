@@ -60,15 +60,20 @@ public class ArrivalInfoService {
                 null,
                 String.class);
 
-        String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = null;
         try {
-            jsonNode = objectMapper.readTree(responseBody);
+            jsonNode = objectMapper.readTree(response.getBody());
         } catch (JsonProcessingException e) {
             log.info("json parse Exception [JsonProcessingException] : {}", e.getMessage());
             throw new RuntimeException(e);
         }
+
+        if (null != jsonNode.get("status")) {
+            log.warn("!!! api response error, station name : [{}]", stationName);
+            return ;
+        }
+
         JsonNode realtimeArrivalList = jsonNode.get("realtimeArrivalList");
 
         for (int i = 0; i < 100; i++) {
