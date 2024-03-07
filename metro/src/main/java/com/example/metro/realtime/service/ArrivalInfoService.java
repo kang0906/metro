@@ -96,6 +96,8 @@ public class ArrivalInfoService {
                 .lineName(nextStation.getSubwayName())
                 .nextStationName(nextStation.getStationName())
                 .arrivalTime(jsonNode.get("barvlDt").asInt())
+                .arvlMsg2(jsonNode.get("arvlMsg2").asText())
+                .arvlMsg3(jsonNode.get("arvlMsg3").asText())
                 .build();
         arrivalInfoLogRepository.save(arrivalInfoLog);
 

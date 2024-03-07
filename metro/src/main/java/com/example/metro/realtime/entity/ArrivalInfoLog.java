@@ -21,11 +21,16 @@ public class ArrivalInfoLog extends BaseEntity {
     private String nextStationName; // 다음 역 이름(방향)
     private int arrivalTime;   // 도착 예정 시간(초) (barvlDt)
 
+    private String arvlMsg2;    // 도착 정보 메시지 1
+    private String arvlMsg3;    // 도착 정보 메시지 2
+
     @Builder
-    public ArrivalInfoLog(String stationName, String lineName, String nextStationName, int arrivalTime) {
+    public ArrivalInfoLog(String stationName, String lineName, String nextStationName, int arrivalTime, String arvlMsg2, String arvlMsg3) {
         this.stationName = stationName;
         this.lineName = lineName;
         this.nextStationName = nextStationName;
         this.arrivalTime = arrivalTime;
+        this.arvlMsg2 = arvlMsg2;
+        this.arvlMsg3 = arvlMsg3;
     }
 }
