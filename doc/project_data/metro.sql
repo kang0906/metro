@@ -46,38 +46,100 @@ INSERT INTO seoul_api_station_info(subway_id,station_id,station_name,subway_name
 
 
 -- ================== 호선별 도착정보 메세지 형식(포멧) 통계 ================================
-select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
+-- alter table arrival_info_log ADD COLUMN arvl_msg2_format varchar(255);
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
 	where arvl_msg2 != '미설정' group by arvl_msg2 ;
 
 select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
-	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇] 도착';
+	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇()] 도착';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
+	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '^도착$';
 
 select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
 	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[[0-9]]번째 전역';	-- 이 패턴의 경우 '[가-힇] 도착' 케이스와 통계 정보가 겹침
 
 select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
-	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇] 진입';-- and line_name = '2호선';
+	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇()] 진입';-- and line_name = '2호선';
 
 select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
-	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇] 출발';-- and line_name = '2호선';
+	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇()] 출발';-- and line_name = '2호선';
 
 select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
-	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇] 전역출발';-- and line_name = '2호선';
+	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[가-힇()] 전역출발';-- and line_name = '2호선';
 
 select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
-	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[0-9]분 후';-- and line_name = '2호선'; -- 이 패턴의 경우 (X분 후) 뒤에 역이릉이 없는 경우가 존재함
+	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[0-9]{1,2}분 후';-- and line_name = '2호선'; -- 이 패턴의 경우 (X분 후) 뒤에 역이릉이 없는 경우가 존재함
 	
 select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time  from arrival_info_log 
-	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[0-9]분 [0-9]초 후';-- and line_name = '2호선'; -- 이 패턴의 경우 (X분 후) 뒤에 역이릉이 없는 경우가 존재함
+	where arvl_msg2 != '미설정' and arvl_msg2 REGEXP '[0-9]{1,2}분 [0-9]{1,2}초 후';-- and line_name = '2호선'; -- 이 패턴의 경우 (X분 후) 뒤에 역이릉이 없는 경우가 존재함
 
 select count(*), line_name, 'X번째 전역' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[[0-9]]번째 전역' group By line_name ;
-select count(*), line_name, 'XX 도착' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇] 도착' group By line_name ;
+select count(*), line_name, 'XX 도착' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇()] 도착' group By line_name ;
+select count(*), line_name, '도착' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '^도착$' group By line_name ;
 select count(*), line_name, '전역 도착' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '전역 도착' group By line_name ; -- 이 패턴의 경우 '[가-힇] 도착' 케이스와 통계 정보가 겹침
-select count(*), line_name, 'XX 진입' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇] 진입' group By line_name ;
-select count(*), line_name, 'XX 출발' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇] 출발' group By line_name ;
-select count(*), line_name, 'XX 전역출발' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇] 전역출발' group By line_name ;
+select count(*), line_name, 'XX 진입' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇()] 진입' group By line_name ;
+select count(*), line_name, 'XX 출발' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇()] 출발' group By line_name ;
+select count(*), line_name, 'XX 전역출발' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[가-힇()] 전역출발' group By line_name ;
+select count(*), line_name, 'X분 후' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[0-9]{1,2}분 후' group By line_name ;
 select count(*), line_name, 'X분 후' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[0-9]분 후' group By line_name ;
-select count(*), line_name, 'X분 X초 후' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[0-9]분 [0-9]초 후' group By line_name ;
+select count(*), line_name, 'X분 X초 후' from arrival_info_log where arvl_msg2 != '미설정' AND arvl_msg2 REGEXP '[0-9]{1,2}분 [0-9]{1,2}초 후' group By line_name ;
 
+-- ## 포맷 형식 저장
+UPDATE arrival_info_log SET arvl_msg2_format = 'XX 전역출발' where arvl_msg2 REGEXP '[가-힇()] 전역출발';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'X번째 전역';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 도착';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = '도착';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 진입';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 출발';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 전역출발';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'X분 후';
+
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'X분 X초 후';
+
+-- ============ group by =============
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'X번째 전역' group By line_name;
+
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 도착' group By line_name;
+
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = '도착' group By line_name;
+
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 진입' group By line_name;
+
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 출발' group By line_name;
+
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'XX 전역출발' group By line_name;
+
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'X분 후' group By line_name;
+
+select count(*), line_name, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2_format = 'X분 X초 후' group By line_name;
+
+-- 저장되지 못한 케이스 있는지 확인 쿼리
+select arrival_time, line_name , arvl_msg2, arvl_msg3, station_name, next_station_name, created_date_time, arvl_msg2_format from arrival_info_log 
+	where arvl_msg2 != '미설정' and arvl_msg2_format is NULL;
 -- ========================================================================
 
